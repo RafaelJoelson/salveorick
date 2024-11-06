@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Salve o professor</title>
+    <style>
+        /* Fonte pixelada */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        /* Estilos básicos */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 600px;
+            text-align: center;
+            font-family: 'Press Start 2P', cursive;
+            background-color: #1a1a2e;
+            color: #ffdd59;
+        }
+        
+        header {
+            width: 100%;
+            background-color: #ff4757;
+            border: solid #c0392b 8px;
+            padding: 10px 0;
+            box-shadow: 0px 4px #c0392b;
+        }
+        
+        h1 {
+            color: #1a1a2e;
+            margin: 0;
+        }
+        
+        #forca img { 
+            width: 150px; 
+            height: auto; 
+        }
+        
+        .palavra-letras { 
+            font-size: 32px; 
+            letter-spacing: 10px; 
+            margin-top: 20px; 
+            color: #ffdd59;
+        }
+        
+        .letras { 
+            margin-top: 20px; 
+        }
+        
+        .letra { 
+            color: #1a1a2e; 
+            margin: 0 5px; 
+            font-size: 24px; 
+            cursor: pointer; 
+            display: inline-block; 
+            background-color: #ffdd59; 
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .letra:hover { 
+            background-color: #ff4757; 
+            color: #ffffff;
+        }
+        
+        .letra.disabled { 
+            color: grey; 
+            cursor: not-allowed; 
+            background-color: #444; 
+        }
+        
+        .container {
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            height: 600px;
+        }
+        
+        .painel {
+            width: 50%;
+            border: solid #ff6b6b 8px;
+            padding: 20px;
+            background-color: #33334d;
+            color: #ffdd59;
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 4px #222f3e;
+        }
+        
+        .forca-container {
+            width: 50%;
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            border: solid #c0392b 8px;
+            background-image: url(./img/bkground.webp);
+            background-size: contain;
+            box-shadow: 0px 6px #222f3e;
+        }
+        
+        .forca {      
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Salve o Prof. Ricardo!</h1>
+    </header>
+    <div class="container">
+        <section class="forca-container">
+            <div class="forca" id="forca">
+                <img id="imagemForca" src="./img/ricardo1.gif" alt="Forca">
+            </div>
+        </section>
+        <section class="painel">
+            <div id="palavraContainer" class="palavra-letras"></div>
+            <div class="letras">
+                <div id="letrasContainer"></div>
+            </div>
+        </section>
+    </div>
+        <!-- Elementos de áudio -->
+        <audio id="musicaFundo" src="./audio/backgroundmusic.mp3" loop></audio>
+        <audio id="somAcerto" src="./audio/acerto.mp3"></audio>
+        <audio id="somErro" src="./audio/erro.mp3"></audio>
+        <audio id="somGameOver" src="./audio/gameover.mp3"></audio>
+    <script>
+        // Referências aos elementos de áudio
+        const musicaFundo = document.getElementById("musicaFundo");
+        const somAcerto = document.getElementById("somAcerto");
+        const somErro = document.getElementById("somErro");
+        const somGameOver = document.getElementById("somGameOver");
+
+        // Iniciar música de fundo ao carregar a página
+        musicaFundo.play();
+
+        // Obter palavra secreta da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const palavraSecreta = urlParams.get('palavra').toUpperCase();
+
+        // Configurações iniciais
+        const letrasCertas = Array(palavraSecreta.length).fill('_');
+        let erros = 0;
+
+        // Exibir espaço para a palavra
+        const palavraContainer = document.getElementById("palavraContainer");
+        palavraContainer.innerHTML = letrasCertas.join(' ');
+
+        // Criar painel de letras
+        const letrasContainer = document.getElementById("letrasContainer");
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(letra => {
+            const span = document.createElement("span");
+            span.classList.add("letra");
+            span.textContent = letra;
+            span.addEventListener("click", () => escolherLetra(letra, span));
+            letrasContainer.appendChild(span);
+        });
+
+        function escolherLetra(letra, span) {
+            span.classList.add("disabled");
+            span.removeEventListener("click", () => escolherLetra(letra, span));
+
+            if (palavraSecreta.includes(letra)) {
+                // Atualizar letras certas
+                somAcerto.play(); // Tocar som de acerto
+                palavraSecreta.split('').forEach((char, index) => {
+                    if (char === letra) letrasCertas[index] = letra;
+                });
+                palavraContainer.innerHTML = letrasCertas.join(' ');
+
+                // Verificar vitória
+                if (!letrasCertas.includes('_')) {
+                    window.location.href = "vitoria.html"
+                }
+            } else {
+                somErro.play(); // Tocar som de erro
+                // Incrementar erros e atualizar imagem do boneco
+                erros++;
+                document.getElementById("imagemForca").src = `./img/ricardo${erros + 1}.gif`;
+
+                // Verificar derrota
+                if (erros === 6) {
+                    // Aguardar 1 segundo antes de exibir a última imagem
+                    alert("Fim de jogo! A palavra era " + palavraSecreta);
+                    setTimeout(() => {
+                        document.getElementById("imagemForca").src = `./img/ricardo8.gif`;
+                        musicaFundo.pause();
+                        somGameOver.play(); // Tocar som de game over
+                        
+                    }, 800);
+
+                    // Bloquear todas as letras
+                    document.querySelectorAll('.letra').forEach(letra => letra.classList.add('disabled'));
+                }
+            }
+        }
+    </script>
+</body>
+</html>
