@@ -51,13 +51,44 @@
             border-radius: 5px;
             box-shadow: 0px 5px 0px #c0392b;
         }
+        /* Estilo do botão de novo jogo */
+        .new-game-button {
+            background-color: #ff4757;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0px 5px 0px #c0392b;
+            margin-top: 20px;
+            transition: transform 0.1s;
+        }
+
+        .new-game-button:active {
+            transform: translateY(4px);
+            box-shadow: 0px 2px 0px #c0392b;
+        }
+
+        .new-game-button:hover {
+            background-color: #ff6b6b;
+        }
     </style>
 </head>
 <body>
     <div class="victory-container">
         <h1>Parabéns!<br>Você salvou o Professor Ricardo!</h1>
         <!-- Imagem do Professor Ricardo dando joinha -->
-        <img class="victory-image" src="img/professor-ricardo-joinha.png" alt="Professor Ricardo dando joinha">
+        <img class="victory-image" src="./img/ricardovitoria.png" alt="Professor Ricardo dando joinha">
+        <button class="new-game-button" onclick="window.location.href='index.html'">Novo Jogo</button>
     </div>
+    <!-- Elementos de áudio -->
+    <audio id="musicaVitoria" src="./audio/vitoria.mp3"></audio>
+    <script>
+        // Referências aos elementos de áudio
+        const musicaVitoria = document.getElementById("musicaVitoria");
+        // Iniciar música de fundo ao carregar a página
+        musicaVitoria.play();
+    </script>
 </body>
 </html>

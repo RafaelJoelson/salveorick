@@ -38,19 +38,20 @@
         }
         
         .palavra-letras { 
-            font-size: 32px; 
+            font-size: 24px; 
             letter-spacing: 10px; 
             margin-top: 20px; 
             color: #ffdd59;
+            
         }
         
-        .letras { 
-            margin-top: 20px; 
+        .letras {
+            margin-top: 20px;
         }
         
         .letra { 
             color: #1a1a2e; 
-            margin: 0 5px; 
+            margin: 1px 5px; 
             font-size: 24px; 
             cursor: pointer; 
             display: inline-block; 
@@ -72,33 +73,32 @@
         }
         
         .container {
-            display: inline-block;
+            display: inline-flex;
             justify-content: center;
             align-items: center;
-            width: 80%;
+            width: 90%;
             height: 600px;
         }
         
         .painel {
-            width: 50%;
+            width: 70%;
+            height: 200px;
             border: solid #ff6b6b 8px;
             padding: 20px;
             background-color: #33334d;
             color: #ffdd59;
             display: inline-block;
-            justify-content: center;
-            align-items: center;
             box-shadow: 0px 4px #222f3e;
         }
         
         .forca-container {
-            width: 50%;
+            width: 30%;
             display: inline-block;
             justify-content: center;
             align-items: center;
             border: solid #c0392b 8px;
             background-image: url(./img/bkground.webp);
-            background-size: contain;
+            background-size: cover;
             box-shadow: 0px 6px #222f3e;
         }
         
@@ -190,12 +190,12 @@
                 // Verificar derrota
                 if (erros === 6) {
                     // Aguardar 1 segundo antes de exibir a última imagem
-                    alert("Fim de jogo! A palavra era " + palavraSecreta);
+                    //alert("Fim de jogo! A palavra era " + palavraSecreta);
                     setTimeout(() => {
                         document.getElementById("imagemForca").src = `./img/ricardo8.gif`;
                         musicaFundo.pause();
                         somGameOver.play(); // Tocar som de game over
-                        
+                        palavraContainer.innerHTML = "GAME OVER! A PALAVRA ERA:"+ palavraSecreta; // Revelar a palavra secreta
                     }, 800);
 
                     // Bloquear todas as letras
