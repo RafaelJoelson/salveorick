@@ -128,11 +128,11 @@
             </div>
         </section>
     </div>
-        <!-- Elementos de áudio -->
-        <audio id="musicaFundo" src="./audio/backgroundmusic.mp3" loop></audio>
-        <audio id="somAcerto" src="./audio/acerto.mp3"></audio>
-        <audio id="somErro" src="./audio/erro.mp3"></audio>
-        <audio id="somGameOver" src="./audio/gameover.mp3"></audio>
+    <!-- Elementos de áudio -->
+    <audio id="musicaFundo" src="./audio/backgroundmusic.mp3" loop></audio>
+    <audio id="somAcerto" src="./audio/acerto.mp3"></audio>
+    <audio id="somErro" src="./audio/erro.mp3"></audio>
+    <audio id="somGameOver" src="./audio/gameover.mp3"></audio>
     <script>
         // Referências aos elementos de áudio
         const musicaFundo = document.getElementById("musicaFundo");
@@ -151,11 +151,27 @@
         const letrasCertas = Array(palavraSecreta.length).fill('_');
         let erros = 0;
 
+        // Mapeamento de equivalências entre letras
+        const mapLetras = {
+            'A': ['A', 'Á', 'À', 'Ã', 'Â'],
+            'E': ['E', 'É', 'È', 'Ê'],
+            'I': ['I', 'Í', 'Ì', 'Î'],
+            'O': ['O', 'Ó', 'Ò', 'Õ', 'Ô'],
+            'U': ['U', 'Ú', 'Ù', 'Û'],
+            'C': ['C', 'Ç']
+        };
+
+        // Função para verificar equivalência entre letras
+        function letraEquivalente(letra, char) {
+            if (letra === char) return true;
+            return mapLetras[letra]?.includes(char) || mapLetras[char]?.includes(letra);
+        }
+
         // Exibir espaço para a palavra
         const palavraContainer = document.getElementById("palavraContainer");
         palavraContainer.innerHTML = letrasCertas.join(' ');
 
-        // Criar painel de letras
+        // Criar painel de letras sem incluir Ç
         const letrasContainer = document.getElementById("letrasContainer");
         'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(letra => {
             const span = document.createElement("span");
@@ -169,36 +185,35 @@
             span.classList.add("disabled");
             span.removeEventListener("click", () => escolherLetra(letra, span));
 
-            if (palavraSecreta.includes(letra)) {
-                // Atualizar letras certas
+            let acertou = false;
+            palavraSecreta.split('').forEach((char, index) => {
+                if (letraEquivalente(letra, char)) {
+                    letrasCertas[index] = char;
+                    acertou = true;
+                }
+            });
+
+            if (acertou) {
                 somAcerto.play(); // Tocar som de acerto
-                palavraSecreta.split('').forEach((char, index) => {
-                    if (char === letra) letrasCertas[index] = letra;
-                });
                 palavraContainer.innerHTML = letrasCertas.join(' ');
 
                 // Verificar vitória
                 if (!letrasCertas.includes('_')) {
-                    window.location.href = "vitoria.html"
+                    window.location.href = "vitoria.html";
                 }
             } else {
                 somErro.play(); // Tocar som de erro
-                // Incrementar erros e atualizar imagem do boneco
                 erros++;
                 document.getElementById("imagemForca").src = `./img/ricardo${erros + 1}.gif`;
 
-                // Verificar derrota
                 if (erros === 6) {
-                    // Aguardar 1 segundo antes de exibir a última imagem
-                    //alert("Fim de jogo! A palavra era " + palavraSecreta);
+                    alert("Fim de jogo! A palavra era " + palavraSecreta);
                     setTimeout(() => {
                         document.getElementById("imagemForca").src = `./img/ricardo8.gif`;
                         musicaFundo.pause();
-                        somGameOver.play(); // Tocar som de game over
-                        palavraContainer.innerHTML = "GAME OVER! A PALAVRA ERA:"+ palavraSecreta; // Revelar a palavra secreta
+                        somGameOver.play();
                     }, 800);
 
-                    // Bloquear todas as letras
                     document.querySelectorAll('.letra').forEach(letra => letra.classList.add('disabled'));
                 }
             }
