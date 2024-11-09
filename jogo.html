@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Salve o professor</title>
+    <title>Salve o Professor</title>
     <style>
         /* Fonte pixelada */
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 600px;
+            height: 100vh;
             text-align: center;
             font-family: 'Press Start 2P', cursive;
             background-color: #1a1a2e;
@@ -25,24 +25,33 @@
             border: solid #c0392b 8px;
             padding: 10px 0;
             box-shadow: 0px 4px #c0392b;
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
         }
         
         h1 {
             color: #1a1a2e;
             margin: 0;
+            font-size: 1.5em;
         }
         
-        #forca img { 
-            width: 150px; 
-            height: auto; 
+        #timer {
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #1a1a2e;
+            background-color: #ffdd59;
+            padding: 5px 15px;
+            border-radius: 8px;
         }
         
         .palavra-letras { 
             font-size: 24px; 
             letter-spacing: 10px; 
             margin-top: 20px; 
-            color: #ffdd59;
-            
         }
         
         .letras {
@@ -73,40 +82,31 @@
         }
         
         .container {
-            display: inline-flex;
+            display: flex;
             justify-content: center;
             align-items: center;
-            width: 90%;
-            height: 600px;
+            height: 80vh;
         }
         
         .painel {
-            width: 70%;
-            height: 200px;
+            width: 50%;
             border: solid #ff6b6b 8px;
             padding: 20px;
             background-color: #33334d;
             color: #ffdd59;
-            display: inline-block;
             box-shadow: 0px 4px #222f3e;
         }
         
         .forca-container {
-            width: 30%;
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
+            width: 25%;
             border: solid #c0392b 8px;
             background-image: url(./img/bkground.webp);
             background-size: cover;
             box-shadow: 0px 6px #222f3e;
         }
         
-        .forca {      
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            width: 150px;
+        .forca img {
+            width: 100%;
             height: auto;
         }
     </style>
@@ -114,12 +114,11 @@
 <body>
     <header>
         <h1>Salve o Prof. Ricardo!</h1>
+        <div id="timer">03:00</div>
     </header>
     <div class="container">
         <section class="forca-container">
-            <div class="forca" id="forca">
-                <img id="imagemForca" src="./img/ricardo1.gif" alt="Forca">
-            </div>
+            <img id="imagemForca" src="./img/ricardo1.gif" alt="Forca">
         </section>
         <section class="painel">
             <div id="palavraContainer" class="palavra-letras"></div>
@@ -140,18 +139,15 @@
         const somErro = document.getElementById("somErro");
         const somGameOver = document.getElementById("somGameOver");
 
-        // Iniciar música de fundo ao carregar a página
         musicaFundo.play();
 
-        // Obter palavra secreta da URL
         const urlParams = new URLSearchParams(window.location.search);
         const palavraSecreta = urlParams.get('palavra').toUpperCase();
 
-        // Configurações iniciais
         const letrasCertas = Array(palavraSecreta.length).fill('_');
         let erros = 0;
+        let tempoRestante = 3 * 60; // 3 minutos em segundos
 
-        // Mapeamento de equivalências entre letras
         const mapLetras = {
             'A': ['A', 'Á', 'À', 'Ã', 'Â'],
             'E': ['E', 'É', 'È', 'Ê'],
@@ -161,17 +157,14 @@
             'C': ['C', 'Ç']
         };
 
-        // Função para verificar equivalência entre letras
         function letraEquivalente(letra, char) {
             if (letra === char) return true;
             return mapLetras[letra]?.includes(char) || mapLetras[char]?.includes(letra);
         }
 
-        // Exibir espaço para a palavra
         const palavraContainer = document.getElementById("palavraContainer");
         palavraContainer.innerHTML = letrasCertas.join(' ');
 
-        // Criar painel de letras sem incluir Ç
         const letrasContainer = document.getElementById("letrasContainer");
         'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(letra => {
             const span = document.createElement("span");
@@ -194,30 +187,70 @@
             });
 
             if (acertou) {
-                somAcerto.play(); // Tocar som de acerto
+                somAcerto.play();
                 palavraContainer.innerHTML = letrasCertas.join(' ');
-
-                // Verificar vitória
                 if (!letrasCertas.includes('_')) {
                     window.location.href = "vitoria.html";
                 }
             } else {
-                somErro.play(); // Tocar som de erro
-                erros++;
-                document.getElementById("imagemForca").src = `./img/ricardo${erros + 1}.gif`;
-
-                if (erros === 6) {
-                    alert("Fim de jogo! A palavra era " + palavraSecreta);
-                    setTimeout(() => {
-                        document.getElementById("imagemForca").src = `./img/ricardo8.gif`;
-                        musicaFundo.pause();
-                        somGameOver.play();
-                    }, 800);
-
-                    document.querySelectorAll('.letra').forEach(letra => letra.classList.add('disabled'));
-                }
+                incrementarErro();
             }
         }
+
+        function incrementarErro() {
+            somErro.play();
+            erros++;
+            document.getElementById("imagemForca").src = `./img/ricardo${erros + 1}.gif`;
+
+            if (erros === 6) {
+                gameOver();
+            }
+        }
+
+        function gameOver() {
+            const imagemForca = document.getElementById("imagemForca");
+            const imagemAtual = imagemForca.src.split('/').pop(); // Obtém o nome do arquivo da imagem atual
+
+            let imagemIndex = parseInt(imagemAtual.match(/\d+/)[0]); // Extrai o número da imagem atual
+
+            const trocarImagem = () => {
+                if (imagemIndex < 8) {
+                    imagemIndex++;
+                    imagemForca.src = `./img/ricardo${imagemIndex}.gif`;
+                    if (imagemIndex === 8) {
+                        setTimeout(() => {
+                            musicaFundo.pause();
+                            somGameOver.play();
+                            palavraContainer.innerHTML = palavraSecreta;
+                            document.querySelectorAll('.letra').forEach(letra => letra.classList.add('disabled'));
+                            clearInterval(timerInterval);
+                        }, 800);
+                    } else {
+                        setTimeout(trocarImagem, imagemIndex === 7 ? 800 : 200);
+                    }
+                }
+            };
+
+            trocarImagem();
+        }
+
+        function atualizarTimer() {
+            const minutos = Math.floor(tempoRestante / 60).toString().padStart(2, '0');
+            const segundos = (tempoRestante % 60).toString().padStart(2, '0');
+            document.getElementById("timer").textContent = `${minutos}:${segundos}`;
+
+            if (tempoRestante > 0) {
+                if (tempoRestante % 30 === 0 && tempoRestante !== 3 * 60) {
+                    //incrementarErro();
+                }
+                tempoRestante--;
+            } else {
+                clearInterval(timerInterval);
+                gameOver();
+            }
+        }
+
+        const timerInterval = setInterval(atualizarTimer, 1000);
     </script>
 </body>
 </html>

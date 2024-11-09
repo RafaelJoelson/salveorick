@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Começar o Jogo</title>
+    <style>
+        /* Fonte pixelada */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        /* Estilos básicos */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a2e;
+            font-family: 'Press Start 2P', cursive;
+            color: #ffdd59;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .start-button {
+            background-color: #ff4757;
+            color: #ffffff;
+            font-size: 24px;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0px 5px 0px #c0392b;
+            transition: transform 0.1s;
+        }
+
+        .start-button:hover {
+            background-color: #ff6b6b;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Preparado para Salvar o Professor?</h1>
+        <button class="start-button" onclick="iniciarJogo()">Começar Jogo</button>
+    </div>
+    <script>
+        // Obtém a palavra secreta da URL e redireciona para jogo.html
+        function iniciarJogo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const palavra = urlParams.get('palavra');
+            if (palavra) {
+                window.location.href = `jogo.html?palavra=${palavra}`;
+            } else {
+                alert("Palavra secreta não encontrada! Retorne à página inicial.");
+            }
+        }
+    </script>
+</body>
+</html>
