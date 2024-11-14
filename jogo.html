@@ -209,14 +209,16 @@
 
         function gameOver() {
             const imagemForca = document.getElementById("imagemForca");
-            const imagemAtual = imagemForca.src.split('/').pop(); // Obtém o nome do arquivo da imagem atual
-
-            let imagemIndex = parseInt(imagemAtual.match(/\d+/)[0]); // Extrai o número da imagem atual
+            let imagemIndex = 7; // Começa na imagem após o erro final
 
             const trocarImagem = () => {
-                if (imagemIndex < 8) {
-                    imagemIndex++;
+                if (imagemIndex <= 8) {
                     imagemForca.src = `./img/ricardo${imagemIndex}.gif`;
+
+                    // Ajusta o intervalo para a transição final
+                    const delay = imagemIndex === 7 ? 800 : 200;
+
+                    // Se for a última imagem, termina o jogo
                     if (imagemIndex === 8) {
                         setTimeout(() => {
                             musicaFundo.pause();
@@ -224,15 +226,17 @@
                             palavraContainer.innerHTML = palavraSecreta;
                             document.querySelectorAll('.letra').forEach(letra => letra.classList.add('disabled'));
                             clearInterval(timerInterval);
-                        }, 800);
+                        }, delay);
                     } else {
-                        setTimeout(trocarImagem, imagemIndex === 7 ? 800 : 200);
+                        imagemIndex++;
+                        setTimeout(trocarImagem, delay);
                     }
                 }
             };
 
             trocarImagem();
         }
+
 
         function atualizarTimer() {
             const minutos = Math.floor(tempoRestante / 60).toString().padStart(2, '0');
