@@ -133,7 +133,6 @@
     <audio id="somErro" src="./audio/erro.mp3"></audio>
     <audio id="somGameOver" src="./audio/gameover.mp3"></audio>
     <script>
-        // Referências aos elementos de áudio
         const musicaFundo = document.getElementById("musicaFundo");
         const somAcerto = document.getElementById("somAcerto");
         const somErro = document.getElementById("somErro");
@@ -141,8 +140,10 @@
 
         musicaFundo.play();
 
+        // Obtém e decifra a palavra secreta da URL
         const urlParams = new URLSearchParams(window.location.search);
-        const palavraSecreta = urlParams.get('palavra').toUpperCase();
+        const palavraCifrada = urlParams.get('palavra');
+        const palavraSecreta = atob(palavraCifrada).toUpperCase();
 
         const letrasCertas = Array(palavraSecreta.length).fill('_');
         let erros = 0;
@@ -209,16 +210,14 @@
 
         function gameOver() {
             const imagemForca = document.getElementById("imagemForca");
-            let imagemIndex = 7; // Começa na imagem após o erro final
+            let imagemIndex = 7;
 
             const trocarImagem = () => {
                 if (imagemIndex <= 8) {
                     imagemForca.src = `./img/ricardo${imagemIndex}.gif`;
 
-                    // Ajusta o intervalo para a transição final
                     const delay = imagemIndex === 7 ? 800 : 200;
 
-                    // Se for a última imagem, termina o jogo
                     if (imagemIndex === 8) {
                         setTimeout(() => {
                             musicaFundo.pause();
@@ -236,7 +235,6 @@
 
             trocarImagem();
         }
-
 
         function atualizarTimer() {
             const minutos = Math.floor(tempoRestante / 60).toString().padStart(2, '0');

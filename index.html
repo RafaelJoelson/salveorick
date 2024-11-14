@@ -85,5 +85,17 @@
         <input type="text" id="palavra" name="palavra" required>
         <button type="submit">Começar Jogo</button>
     </form>
+    
+    <script>
+        document.getElementById("formPalavra").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+
+            const palavraInput = document.getElementById("palavra").value;
+            const palavraCifrada = btoa(palavraInput); // Codifica a palavra em Base64
+            
+            // Redireciona para inicio.html com a palavra cifrada
+            window.location.href = `inicio.html?palavra=${palavraCifrada}`;
+        });
+    </script>
 </body>
 </html>

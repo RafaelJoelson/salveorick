@@ -50,12 +50,12 @@
         <button class="start-button" onclick="iniciarJogo()">Começar Jogo</button>
     </div>
     <script>
-        // Obtém a palavra secreta da URL e redireciona para jogo.html
+        // Obtém a palavra secreta cifrada da URL e redireciona para jogo.html sem alterá-la
         function iniciarJogo() {
             const urlParams = new URLSearchParams(window.location.search);
-            const palavra = urlParams.get('palavra');
-            if (palavra) {
-                window.location.href = `jogo.html?palavra=${palavra}`;
+            const palavraCifrada = urlParams.get('palavra');
+            if (palavraCifrada) {
+                window.location.href = `jogo.html?palavra=${palavraCifrada}`;
             } else {
                 alert("Palavra secreta não encontrada! Retorne à página inicial.");
             }
