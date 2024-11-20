@@ -1,3 +1,4 @@
+```markdown
 # Jogo da Forca - Salve o Professor! 🪓
 
 Este é um projeto de um jogo da forca divertido e estilizado, onde o objetivo é salvar o professor Ricardo! Inspirado no clássico jogo da forca, ele conta com uma interface pixelada retrô e animações temáticas.
@@ -16,6 +17,26 @@ Este é um projeto de um jogo da forca divertido e estilizado, onde o objetivo �
 - **CSS3:** Estilização com design pixelado e retrô.
 - **JavaScript:** Lógica do jogo, manipulação de elementos, e cifragem da palavra.
 
+## 📂 Estrutura do Projeto
+
+```plaintext
+.
+├── index.html         # Página inicial para inserir a palavra secreta
+├── inicio.html        # Página intermediária com o botão para começar o jogo
+├── jogo.html          # Tela principal do jogo
+├── vitoria.html       # Tela de vitória
+├── css/
+│   └── style.css      # (Opcional) Arquivo centralizado de estilos
+├── img/               # Pasta com imagens do jogo
+│   ├── ricardo1.gif
+│   ├── ricardo2.gif
+│   └── ...
+├── audio/             # Pasta com os arquivos de som
+│   ├── backgroundmusic.mp3
+│   ├── acerto.mp3
+│   └── ...
+└── README.md          # Documentação do projeto
+```
 
 ## 🎮 Como Jogar?
 
@@ -28,19 +49,6 @@ Este é um projeto de um jogo da forca divertido e estilizado, onde o objetivo �
 
 https://salveorick.vercel.app/
 
-## 📂 Estrutura do Projeto
-
-.
-├── index.html          # Página inicial para inserir a palavra secreta
-├── inicio.html         # Página intermediária com botão "Começar Jogo"
-├── jogo.html           # Página do jogo
-├── vitoria.html        # Tela de vitória
-├── img/                # Imagens da forca e do fundo
-├── audio/              # Arquivos de áudio do jogo
-├── styles/             # (Opcional) Diretório para folhas de estilo adicionais
-└── README.md           # Documentação do projeto
-
-
 ## 🧩 Próximas Melhorias
 
 - Implementar um sistema de pontuação.
@@ -50,3 +58,4 @@ https://salveorick.vercel.app/
 ## 📝 Licença
 
 Este projeto foi desenvolvido para fins educacionais e é livre para uso. 🚀
+```
