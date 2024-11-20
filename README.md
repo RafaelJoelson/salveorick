@@ -1,4 +1,3 @@
-```markdown
 # Jogo da Forca - Salve o Professor! 🪓
 
 Este é um projeto de um jogo da forca divertido e estilizado, onde o objetivo é salvar o professor Ricardo! Inspirado no clássico jogo da forca, ele conta com uma interface pixelada retrô e animações temáticas.
